@@ -210,11 +210,9 @@ class BaseUserCreationForm(FormMixin, forms.Form):
             'password': self.cleaned_data.get('password1'),
             'fb_token': self.cleaned_data.get('fb_token'),
             'fb_id': self.cleaned_data.get('fb_id'),
-            'cgu': self.cleaned_data.get('cgu'),
-            'newsletter': self.cleaned_data.get('newsletter'),
         }
-        student = self.user_class.objects.create_student(**user_data)
-        return student
+        user = self.user_class.objects.create_user(**user_data)
+        return user
 
 
 #  ==============================

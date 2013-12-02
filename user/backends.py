@@ -5,7 +5,7 @@ from facebook import GraphAPI, GraphAPIError
 from storages.backends.s3boto import S3BotoStorage
 
 # Create static files storages
-StaticS3Storage = lambda: S3BotoStorage(bucket_name=settings.STATIC_BUCKET, location='static')
+StaticS3Storage = lambda: S3BotoStorage(bucket_name=settings.AWS_STATIC_BUCKET, location='static')
 
 
 class FacebookBackend(object):

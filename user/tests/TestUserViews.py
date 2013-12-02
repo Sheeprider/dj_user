@@ -25,11 +25,11 @@ class AnonymousViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name, 'pages/home.html')
 
-    def test_studentcreationview_post_with_valid_data(self):
+    def test_baseusercreationview_post_with_valid_data(self):
         old_user_count = BaseUser.objects.count()
-        valid_data = {'email': 'maxime@smoothie-creative.com', 'password1': 'password', 'password2': 'password', 'cgu': True}
+        valid_data = {'email': 'maxime@smoothie-creative.com', 'password1': 'password', 'password2': 'password',}
         r = post_request(valid_data)
-        view = views.StudentCreationView.as_view()
+        view = views.BaseUserCreationView.as_view()
         response = view(r)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], reverse(settings.LOGIN_URL))
@@ -144,7 +144,7 @@ class FacebookAPIViewsTest(TestCase):
         r = get_request()
         response = views.fb_callback(r)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], reverse('user:student.register'))
+        self.assertEqual(response['location'], reverse('user:register'))
 
     def test_fb_callback_without_code_and_authenticated_student(self):
         r = get_request()
@@ -163,20 +163,20 @@ class FacebookAPIViewsTest(TestCase):
         self.assertEqual(r.user.fb_id, VALID_ID)
         self.assertIsNotNone(r.user.fb_token)
 
-    def test_studentcreationview_get_with_invalid_token(self):
+    def test_baseusercreationview_get_with_invalid_token(self):
         r = get_request()
         r.session['fb_token'] = {'access_token': INVALID_TOKEN}
-        view = views.StudentCreationView.as_view()
+        view = views.BaseUserCreationView.as_view()
         response = view(r)
         self.assertEqual(response.status_code, 200)
         # Invalid fb_token should get cleaned from session
         self.assertNotIn('fb_token', r.session)
 
-    def test_studentcreationview_get_with_valid_token(self):
+    def test_baseusercreationview_get_with_valid_token(self):
         r = get_request()
         r.session['fb_token'] = {'access_token': VALID_TOKEN}
-        view = views.StudentCreationView.as_view()
-        with patch('user.views.StudentCreationView.initial') as mock_initial:
+        view = views.BaseUserCreationView.as_view()
+        with patch('user.views.BaseUserCreationView.initial') as mock_initial:
             response = view(r)
 
         self.assertEqual(response.status_code, 200)
@@ -197,7 +197,7 @@ class FacebookAPIViewsTest(TestCase):
         r = get_request({'code': VALID_CODE})
         response = views.fb_callback(r)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], reverse('user:student.register'))
+        self.assertEqual(response['location'], reverse('user:register'))
 
     def test_fb_callback__with_valid_code_from_valid_account_logs_user(self):
         self.user.fb_token = {"access_token": VALID_TOKEN}

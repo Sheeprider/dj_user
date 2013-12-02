@@ -1,5 +1,8 @@
-Django==1.6
-Facebook==0.0
-Pillow==2.2.1
 boto==2.19.0
+django-any-imagefield==0.8.1
+django-model-utils==1.4.0
+django-storages==1.1.8
+Django==1.6
+Pillow==2.2.1
+requests-facebook==0.2.0
 simplejson==3.3.1

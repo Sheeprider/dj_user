@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
 from user.forms import BaseUserEditionForm
-# from user.models import BaseUser
 
 
 class BaseUserForm(BaseUserEditionForm):

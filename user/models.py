@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from facebook import GraphAPI, GraphAPIError
 from model_utils.managers import InheritanceManager
 
-from commons.fields import S3EnabledImageField
+from user.fields import S3EnabledImageField
 from commons.models import Model
 
 
@@ -58,8 +58,8 @@ class BaseUser(Model, AbstractBaseUser, PermissionsMixin):
     _fb_token = models.CharField(_('facebook token'), default=None, blank=True, null=True, max_length=300)
     _fb_id = models.PositiveIntegerField(_('facebook id'), default=None, blank=True, null=True, max_length=15)
 
-    _avatar = S3EnabledImageField(_('avatar'), upload_to=settings.UPLOAD_BUCKET, null=True, max_length=300, default=None, blank=True)
-    _small_avatar = S3EnabledImageField(_('avatar (small)'), upload_to=settings.UPLOAD_BUCKET, null=True, max_length=300, default=None, blank=True)
+    _avatar = S3EnabledImageField(_('avatar'), upload_to=settings.AWS_UPLOAD_BUCKET, null=True, max_length=300, default=None, blank=True)
+    _small_avatar = S3EnabledImageField(_('avatar (small)'), upload_to=settings.AWS_UPLOAD_BUCKET, null=True, max_length=300, default=None, blank=True)
 
     USERNAME_FIELD = 'email'
 
@@ -123,7 +123,7 @@ class BaseUser(Model, AbstractBaseUser, PermissionsMixin):
         if fb_id:
             if BaseUser.objects.filter(_fb_id=fb_id).exists():
                 raise ValidationError(_('An user is already associated with this facebook account'))
-            self._fb_id = int(fb_id, 10)
+            self._fb_id = int(fb_id)
         else:
             self._fb_id = None
 
@@ -146,5 +146,5 @@ class BaseUser(Model, AbstractBaseUser, PermissionsMixin):
         except GraphAPIError:
             return None
 
-        avatar = data.get(_('data').get('url'))
+        avatar = data.get('data').get('url')
         return avatar

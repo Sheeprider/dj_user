@@ -17,7 +17,7 @@ from storages.backends.s3boto import S3BotoStorage
 #
 # Required settings:
 #   USE_AMAZON_S3 - Boolean, self explanatory
-#   DEFAULT_BUCKET - String, represents the default bucket name to use if one isn't provided
+#   AWS_STORAGE_BUCKET - String, represents the default bucket name to use if one isn't provided
 #   AWS_ACCESS_KEY_ID - String
 #   AWS_SECRET_ACCESS_KEY - String
 #
@@ -32,14 +32,18 @@ class S3EnabledFileField(models.FileField):
 class S3EnabledImageField(AnyImageField):
     allowed_extentions = ['.gif', '.jpeg', '.jpg', '.png']
     help_text = _(
-        'Allowed extensions: [{formats}], max size: [{size}]'.format(
+        u'Allowed extensions: [{formats}], max size: [{size}]'.format(
             formats=', '.join(allowed_extentions), size=filesizeformat(settings.MAX_UPLOAD_SIZE))
     )
 
-    def __init__(self, verbose_name=None, name=None, width_field=None, height_field=None, upload_to=None, storage=None, **kwargs):
-        kwargs['storage'] = storage or S3BotoStorage(bucket_name=upload_to or settings.DEFAULT_BUCKET)
+    def __init__(self, verbose_name=None, name=None, upload_to=None, **kwargs):
+        kwargs['storage'] = kwargs.get('storage', S3BotoStorage(bucket_name=upload_to or settings.AWS_STORAGE_BUCKET))
         kwargs['help_text'] = kwargs.get('help_text') or self.help_text
-        super(S3EnabledImageField, self).__init__(verbose_name, name, width_field, height_field, upload_to, **kwargs)
+        super(S3EnabledImageField, self).__init__(
+            verbose_name=verbose_name,
+            name=name,
+            upload_to=upload_to,
+            **kwargs)
 
 
 try:
