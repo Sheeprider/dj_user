@@ -106,8 +106,8 @@ AUTH_USER_MODEL = 'user.BaseUser'
 #  ==========
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_KEY')
-AWS_STORAGE_BUCKET = os.environ.get('AWS_BUCKET_NAME')
-AWS_STATIC_BUCKET = AWS_STORAGE_BUCKET
+AWS_BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
+AWS_STATIC_BUCKET = AWS_BUCKET_NAME
 if not DEBUG:
     # =====================================
     # = Upload static files to S3 on prod =
@@ -118,7 +118,7 @@ if not DEBUG:
 #  ==========
 #  = Upload =
 #  ==========
-AWS_UPLOAD_BUCKET = AWS_STORAGE_BUCKET
+AWS_UPLOAD_BUCKET = AWS_BUCKET_NAME
 MAX_UPLOAD_SIZE = 2621440  # 2.5 MB
 AVATAR_SIZE = 160, 200
 AVATAR_SMALLSIZE = 40, 50
@@ -137,10 +137,10 @@ AUTHENTICATION_BACKENDS = AB + (
 #  = Test runner =
 #  ===============
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_PLUGINS = [
+NOSE_PLUGINS = (
     'commons.cover.Coverage',
-]
-NOSE_ARGS = [
+)
+NOSE_ARGS = (
     # "--processes=-1",
     # "--with-stopwatch",
     # py -c "import pickle, pprint;e_time = pickle.load( open( '.nose-stopwatch-times', 'rb' ) );pprint.pprint(e_time, indent=4);exit();"
@@ -173,4 +173,6 @@ NOSE_ARGS = [
     "--cover-omit=*stringprep*",
     "--cover-omit=*urllib2*",
     "--cover-omit=*xml*",
-]
+    "--cover-omit=*ctypes*",
+    "--cover-omit=*uuid*",
+)

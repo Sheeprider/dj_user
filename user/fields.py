@@ -16,8 +16,7 @@ from storages.backends.s3boto import S3BotoStorage
 # Extended FileField and ImageField for use with Django and Boto.
 #
 # Required settings:
-#   USE_AMAZON_S3 - Boolean, self explanatory
-#   AWS_STORAGE_BUCKET - String, represents the default bucket name to use if one isn't provided
+#   AWS_BUCKET_NAME - String, represents the default bucket name to use if one isn't provided
 #   AWS_ACCESS_KEY_ID - String
 #   AWS_SECRET_ACCESS_KEY - String
 #
@@ -37,7 +36,7 @@ class S3EnabledImageField(AnyImageField):
     )
 
     def __init__(self, verbose_name=None, name=None, upload_to=None, **kwargs):
-        kwargs['storage'] = kwargs.get('storage', S3BotoStorage(bucket_name=upload_to or settings.AWS_STORAGE_BUCKET))
+        kwargs['storage'] = kwargs.get('storage', S3BotoStorage(bucket_name=upload_to or settings.AWS_BUCKET_NAME))
         kwargs['help_text'] = kwargs.get('help_text') or self.help_text
         super(S3EnabledImageField, self).__init__(
             verbose_name=verbose_name,

@@ -92,8 +92,8 @@ class AbstractModelTest(TestCase):
             # Drop tables using CASCADE.
             statement = statement[:-1] + " CASCADE" + statement[-1:]
             try:
-                cursor.execute(statement)
                 logger.debug("\n\tExecute statement: '{0}'.".format(statement))
+                cursor.execute(statement)
             except DatabaseError, e:
                 logger.error("\n\tStatement: '{0}'\n\tfailed with error: '{1}'.".format(statement, e))
                 transaction.rollback()

@@ -11,7 +11,7 @@ from user.utils import unique_slugify
 
 
 class BaseUserCreationFormTest(TestCase):
-    def BaseUserstudentcreationform_clean_email(self):
+    def test_baseuserstudentcreationform_clean_email(self):
         field = 'email'
         user = BaseUserFactory()
 
@@ -24,7 +24,7 @@ class BaseUserCreationFormTest(TestCase):
         valid_email_form.is_valid()
         self.assertNotIn(field, valid_email_form.errors)
 
-    def BaseUserstudentcreationform_clean_password2(self):
+    def test_baseuserstudentcreationform_clean_password2(self):
         field = 'password%s'
 
         password_mismatch_form = BaseUserCreationForm({field % 1: 'password', field % 2: 'not_password'})
@@ -36,7 +36,7 @@ class BaseUserCreationFormTest(TestCase):
         valid_password_form.is_valid()
         self.assertNotIn(field % 2, valid_password_form.errors)
 
-    def BaseUserstudentcreationform_save(self):
+    def test_baseuserstudentcreationform_save(self):
         """Check that new user's slug and name are first part of email, uniquely slugified."""
         unique_slug = unique_slugify('baptiste', BaseUser)
         valid_form = BaseUserCreationForm({
